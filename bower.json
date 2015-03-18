@@ -1,0 +1,7 @@
+{
+  "name": "translation selector",
+  "dependencies": {
+    "jquery": "*",
+    "DefinitelyTyped": "*"
+  }
+}

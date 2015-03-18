@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "translation selector",
+  "description": "chrome extension to translate any languages easily.",
+  "version": "1.0",
+  "permissions": [
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content_script.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "translation-selector",
+  "description": "",
+  "version": "0.0.1",
+  "devDependencies": {
+    "coffee-script": "*",
+    "browserify": "*",
+    "tsify": "*",
+    "debowerify": "*",
+    "vinyl-source-stream": "*",
+    "merge2": "*",
+    "gulp-coffee": "*"
+  }
+}
