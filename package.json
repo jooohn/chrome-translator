@@ -10,5 +10,8 @@
     "vinyl-source-stream": "*",
     "merge2": "*",
     "gulp-coffee": "*"
+  },
+  "scripts": {
+    "install": "bower install && gulp"
   }
 }
