@@ -18,18 +18,25 @@ module translator {
 
             resultView.hide();
             if (selectedText.length !== 0) {
-                Translator.search(selectedText)
-                    .then((translation) => {
-                        resultView.render(translation);
-                    }, () => {
-                        // error
-                        console.log('translation error.');
-                    });
+                Translator
+                    .search(selectedText)
+                    .done(resultView.render.bind(resultView))
+                    .fail(console.log);
             }
         });
     });
 
     class ResultView {
+        static STYLE = {
+            'color': '#333',
+            'background-color': 'rgba(255,255,255,0.8)',
+            'text-align': 'left',
+            'position': 'fixed',
+            'top': '0px',
+            'right': '0px',
+            'z-index': 9999
+        };
+
         private $view: JQuery;
         private $list: JQuery;
 
@@ -37,15 +44,7 @@ module translator {
             private $parent: JQuery,
             private fadeDuration: number = 300
         ) {
-            this.$view = $('<div></div>').css({
-                'color': '#333',
-                'background-color': 'rgba(255,255,255,0.8)',
-                'text-align': 'left',
-                'position': 'fixed',
-                'top': '0px',
-                'right': '0px',
-                'z-index': 9999
-            }).hide();
+            this.$view = $('<div></div>').css(ResultView.STYLE).hide();
             this.$list = $('<ul></ul>').appendTo(this.$view);
 
             this.$parent.append(this.$view);
@@ -88,33 +87,26 @@ module translator {
         };
 
         public static search(originalText: string): JQueryPromise<TranslationObject> {
-            var deferred = $.Deferred();
             var params = $.extend({ Word: originalText }, Translator.BASE_PARAMS);
 
             // translate via Dejizo API
-            $.ajax({
+            return $.ajax({
                 url: Translator.ENDPOINT,
-                data: params,
-                success: (response: XMLDocument) => {
-                    var translation = new TranslationObject;
-                    translation.originalText = originalText;
-                    $(response)
-                        .find('TitleList > DicItemTitle')
-                        .each(function(index) {
-                            translation.searchResult.push({
-                                id: $(this).find('ItemID').text().trim(),
-                                title: $(this).find('Title').text().trim()
-                            });
+                data: params
+            }).done((response: XMLDocument) => {
+                var translation = new TranslationObject;
+                translation.originalText = originalText;
+                $(response)
+                    .find('TitleList > DicItemTitle')
+                    .each(function() {
+                        translation.searchResult.push({
+                            id: $(this).find('ItemID').text().trim(),
+                            title: $(this).find('Title').text().trim()
                         });
-                    deferred.resolve(translation);
-                },
-                error: () => {
-                    // todo
-                    deferred.reject();
-                }
-            });
+                    });
 
-            return deferred.promise();
+                return translation;
+            });
         }
     }
 }

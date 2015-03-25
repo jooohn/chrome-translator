@@ -14,7 +14,7 @@ gulp.task 'build', ->
     .pipe gulp.dest 'app/src'
 
 gulp.task 'copy', ->
-  gulp.src 'manifest.json'
+  gulp.src 'src/manifest.json'
     .pipe gulp.dest 'app'
 
 gulp.task 'watch', ['default'], ->
